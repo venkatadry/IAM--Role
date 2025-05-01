@@ -231,6 +231,7 @@ This Terraform block defines an AWS IAM Instance Profile named alice_profile. He
   name = "AliceProfile"
   role = aws_iam_role.alice_role.name
 }
+
 ```
 Explanation:
 resource "aws_iam_instance_profile": This tells Terraform you're creating an IAM Instance Profile. This is required when assigning an IAM role to an EC2 instance.
