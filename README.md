@@ -227,10 +227,11 @@ An error occurred (AccessDenied) when calling the ListObjectsV2 operation: User:
 This Terraform block defines an AWS IAM Instance Profile named alice_profile. Here's a breakdown of what each line does:
 
 
-resource "aws_iam_instance_profile" "alice_profile" {
+```resource "aws_iam_instance_profile" "alice_profile" {
   name = "AliceProfile"
   role = aws_iam_role.alice_role.name
 }
+```
 Explanation:
 resource "aws_iam_instance_profile": This tells Terraform you're creating an IAM Instance Profile. This is required when assigning an IAM role to an EC2 instance.
 
