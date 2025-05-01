@@ -139,16 +139,7 @@ resource "aws_iam_user" "alice" {
   name = "Alice"
 }
 
-resource "aws_iam_instance_profile" "alice_profile" {
-  name = "AliceProfile"
-  role = aws_iam_role.alice_role.name
-}
-
-/*resource "aws_iam_user_instance_profile_attachment" "alice_profile_attachment" {
-  user           = aws_iam_user.alice.name
-  instance_profile = aws_iam_instance_profile.alice_profile.name
-}*/
-
+###IAM Assume Role
 resource "aws_iam_role" "alice_role" {
   name = "AliceRole"
   assume_role_policy = jsonencode({
@@ -164,6 +155,19 @@ resource "aws_iam_role" "alice_role" {
     ]
   })
 }
+
+
+resource "aws_iam_instance_profile" "alice_profile" {
+  name = "AliceProfile"
+  role = aws_iam_role.alice_role.name
+}
+
+/*resource "aws_iam_user_instance_profile_attachment" "alice_profile_attachment" {
+  user           = aws_iam_user.alice.name
+  instance_profile = aws_iam_instance_profile.alice_profile.name
+}*/
+
+
 ####IAM Policy to provide s3 Access
 resource "aws_iam_policy" "allow_s3_access" {
   name        = "AllowS3Access"
@@ -217,3 +221,24 @@ resource "aws_iam_user_policy_attachment" "alice_s3_access" {
 An error occurred (AccessDenied) when calling the ListObjectsV2 operation: User: arn:aws:sts::920373005946:assumed-role/AliceRole/i-0a61c4b2b6c94c64d is not authorized to perform: s3:ListBucket on resource: "arn:aws:s3:::test339943" because no identity-based policy allows the s3:ListBucket action
 [ec2-user@ip-10-0-1-20 ~]$
 ```
+
+
+######
+This Terraform block defines an AWS IAM Instance Profile named alice_profile. Here's a breakdown of what each line does:
+
+
+resource "aws_iam_instance_profile" "alice_profile" {
+  name = "AliceProfile"
+  role = aws_iam_role.alice_role.name
+}
+Explanation:
+resource "aws_iam_instance_profile": This tells Terraform you're creating an IAM Instance Profile. This is required when assigning an IAM role to an EC2 instance.
+
+"alice_profile": This is the name of the Terraform resource (not the actual AWS name). You use this name to reference the instance profile elsewhere in your Terraform code.
+
+name = "AliceProfile": This is the actual name of the instance profile as it will appear in AWS.
+
+role = aws_iam_role.alice_role.name: This line links the instance profile to an IAM Role you've defined elsewhere in your Terraform code (called alice_role). It uses that role's name as the associated role for the instance profile.
+
+Why is this needed?
+In AWS, EC2 instances can't directly assume an IAM role. Instead, they need to use an Instance Profile, which is a container for an IAM Role that can be attached to the instance.
