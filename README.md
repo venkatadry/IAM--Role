@@ -3,9 +3,11 @@ Terraform VPC
 EC2 with ASSUME role  s3
 
 ```#https://medium.com/@a-dem/create-a-private-public-vpc-in-aws-with-terraform-1d8e1b8118d2
+###Provider
 provider "aws" {
   region = "us-east-1"
 }
+##AWS VPC 
 resource "aws_vpc" "example_vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
@@ -14,7 +16,6 @@ resource "aws_vpc" "example_vpc" {
 }
 
 # Retrieve the default subnet ID in the default VPC
-
 
 resource "aws_subnet" "public_subnet" {
   vpc_id     = aws_vpc.example_vpc.id
@@ -147,8 +148,6 @@ resource "aws_iam_instance_profile" "alice_profile" {
   user           = aws_iam_user.alice.name
   instance_profile = aws_iam_instance_profile.alice_profile.name
 }*/
-
-
 
 resource "aws_iam_role" "alice_role" {
   name = "AliceRole"
