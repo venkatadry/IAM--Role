@@ -164,6 +164,7 @@ resource "aws_iam_role" "alice_role" {
     ]
   })
 }
+####IAM Policy to provide s3 Access
 resource "aws_iam_policy" "allow_s3_access" {
   name        = "AllowS3Access"
   description = "Allow Alice to access specific S3 resources"
@@ -190,11 +191,12 @@ resource "aws_iam_policy" "allow_s3_access" {
     ]
   })
 }
-
+###Attaching s3 access Policy to  the role alice_role
 resource "aws_iam_role_policy_attachment" "attach_s3_access" {
   policy_arn = aws_iam_policy.allow_s3_access.arn
   role       = aws_iam_role.alice_role.name
 }
+###attaching IAM policy to IAM user
 resource "aws_iam_user_policy_attachment" "alice_s3_access" {
   user       = aws_iam_user.alice.name
   policy_arn = aws_iam_policy.allow_s3_access.arn
